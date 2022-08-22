@@ -31,7 +31,7 @@ public class KlijentskaForma extends javax.swing.JFrame {
     public KlijentskaForma() {
         initComponents();
         setLocationRelativeTo(null);
-        popuniRegione();
+        popuniRegione(); //popunjava kombo-box 'Region'
         tblPrognoze.setModel(new ModelTabeleKlijent()); //ovo setModel() je iz difolt biblioteke, nismo mi pisali
     }
 
