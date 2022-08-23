@@ -5,13 +5,14 @@
  */
 package modeli;
 
+import domen.StavkaIzvestaja;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 public class ModelTabeleServer extends AbstractTableModel {
 
-    ArrayList<Object> lista;
-    String[] kolone = {};
+    ArrayList<StavkaIzvestaja> lista;
+    String[] kolone = {"Meteorolog", "Dan", "Prognoza za regione"};
 
     public ModelTabeleServer() {
         lista = new ArrayList<>();
@@ -34,15 +35,24 @@ public class ModelTabeleServer extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Object stavkaListe = lista.get(rowIndex);
+        StavkaIzvestaja si = lista.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
-                return "";
+                return si.getMeteorolog();
+            case 1:
+                return si.getDan();
+            case 2:
+                return si.getPrognozaZaRegione();
 
             default:
                 return "return!";
         }
+    }
+
+    public void dodajizvestaj(ArrayList<StavkaIzvestaja> listaBaza) {
+        lista = listaBaza;
+        fireTableDataChanged();
     }
 
 }

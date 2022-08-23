@@ -5,6 +5,11 @@
  */
 package forme;
 
+import domen.StavkaIzvestaja;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import logika.Kontroler;
+import modeli.ModelTabeleServer;
 import niti.OsveziNit;
 import niti.PokreniServer;
 
@@ -21,8 +26,8 @@ public class ServerskaForma extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         // obavezno setujte model tabele pre OsveziNit !!!!!!!!!!
-
-        OsveziNit on = new OsveziNit(this);
+        tblIzvestaj.setModel(new ModelTabeleServer());
+        OsveziNit on = new OsveziNit(this); //pokrece metodu izvrsiUpit() koja popunjava tabelu na svakih 5 sekundi
         on.start();
         setTitle("Serverska forma");
     }
@@ -36,21 +41,81 @@ public class ServerskaForma extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        cbDanOd = new javax.swing.JCheckBox();
+        cbDanDo = new javax.swing.JCheckBox();
+        txtDanOd = new javax.swing.JFormattedTextField();
+        txtDanDo = new javax.swing.JFormattedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblIzvestaj = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        cbDanOd.setText("Dan od:");
+
+        cbDanDo.setText("Dan do:");
+        cbDanDo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbDanDoActionPerformed(evt);
+            }
+        });
+
+        txtDanOd.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd.MM.yyyy"))));
+
+        txtDanDo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd.MM.yyyy"))));
+
+        tblIzvestaj.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblIzvestaj);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cbDanOd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtDanOd))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cbDanDo)
+                        .addGap(8, 8, 8)
+                        .addComponent(txtDanDo, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDanOd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbDanOd))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbDanDo)
+                    .addComponent(txtDanDo, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cbDanDoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDanDoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbDanDoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -90,9 +155,24 @@ public class ServerskaForma extends javax.swing.JFrame {
     }
 
     public void izvrsiUpit() {
-        System.out.println("ok");
+        
+        ArrayList<StavkaIzvestaja> listaBaza; //ono sto mi vraca kontroler
+        ModelTabeleServer mt = (ModelTabeleServer) tblIzvestaj.getModel();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        String dodatniUpit = "";
+        
+        if(!cbDanOd.isSelected() && !cbDanDo.isSelected()) { //nista nisam cekirao -> vrati mi sve
+            listaBaza = Kontroler.getInstance().vratiIzvestaj(dodatniUpit);
+            mt.dodajizvestaj(listaBaza);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox cbDanDo;
+    private javax.swing.JCheckBox cbDanOd;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblIzvestaj;
+    private javax.swing.JFormattedTextField txtDanDo;
+    private javax.swing.JFormattedTextField txtDanOd;
     // End of variables declaration//GEN-END:variables
 }

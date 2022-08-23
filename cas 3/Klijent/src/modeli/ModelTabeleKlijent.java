@@ -6,6 +6,7 @@
 package modeli;
 
 import domen.PrognozaRegion;
+import domen.Region;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -64,6 +65,15 @@ public class ModelTabeleKlijent extends AbstractTableModel {
 
     public ArrayList<PrognozaRegion> getLista() {
         return lista;
+    }
+
+    public boolean postojiRegion(Region region) {
+        for (PrognozaRegion prognozaRegion : lista) {
+            if(prognozaRegion.getRegion().equals(region)){
+                return true;
+            }
+        }
+        return false;
     }
 
    

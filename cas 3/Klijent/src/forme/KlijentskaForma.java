@@ -230,7 +230,21 @@ public class KlijentskaForma extends javax.swing.JFrame {
         
         //vadimo sve podatke koje nam trebaju za tabelu iz odgovarajucih tekstualni polja/kombo-bekseva
         double temperatura = Double.parseDouble(txtTemperatura.getText());
+        
+        if(temperatura < -50 || temperatura > 50) {
+            JOptionPane.showMessageDialog(this, "Temeperatura mora biti u opsegu: [-50,50]");
+            return;
+        }
+        
         Region region = (Region) cmbRegion.getSelectedItem(); //ovo getSele... vraca Object pa ga kastujem
+        
+        ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel(); //nemoj da se zajebes ne ides 'new ModelTabele...'
+        
+        if(mt.postojiRegion(region)){
+            JOptionPane.showMessageDialog(this, "Vec ste uneli prognozu za ovaj region!");
+            return;
+        }
+        
         String meteoAlarm = (String) cmbMeteoAlarm.getSelectedItem();
         String pojava = (String) cmbPojava.getSelectedItem();
         
@@ -239,7 +253,6 @@ public class KlijentskaForma extends javax.swing.JFrame {
         //stavljam null uvek za jak objekat
         PrognozaRegion pr = new PrognozaRegion(null, -1, temperatura, meteoAlarm, pojava, region);
         
-        ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel(); //nemoj da se zajebes ne ides 'new ModelTabele...'
                                                                              //vec getujes onaj koji si vec kreirao i setovao
         
         mt.dodajPrognozu(pr);
@@ -274,8 +287,8 @@ public class KlijentskaForma extends javax.swing.JFrame {
             
             //opsti nacin
             if(mt.getLista().size() != brojRegiona) {
-//                JOptionPane.showMessageDialog(this, "Morate uneti prognozu za svaki region!");
-//                return;
+                JOptionPane.showMessageDialog(this, "Morate uneti prognozu za svaki region!");
+                return;
             }
             
             
@@ -370,7 +383,7 @@ public class KlijentskaForma extends javax.swing.JFrame {
         
         ArrayList<Region> regioni = (ArrayList<Region>) so.getOdgovor();
         
-        brojRegiona = regioni.size();
+        brojRegiona = regioni.size();//brojJedinstvenihRegiona();
         
         cmbRegion.removeAllItems(); //brisem sadrzaj kombo boksa pre punjenja; ovo mora da se radi samo upamti
         
@@ -378,4 +391,22 @@ public class KlijentskaForma extends javax.swing.JFrame {
             cmbRegion.addItem(region); //addItem, a ne add
         }
     }
+
+//    private int brojJedinstvenihRegiona() {
+//        ArrayList<String> temp = new ArrayList<>();
+//        ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel(); 
+//        
+//        ArrayList<PrognozaRegion> prognozeUTabeli = mt.getLista();
+//        
+//        if(prognozeUTabeli.isEmpty()) {
+//            return 0;
+//        }
+//        for (PrognozaRegion prognoza : prognozeUTabeli) {
+//            if(!temp.contains(prognoza.getRegion().toString())){
+//                temp.add(prognoza.getRegion().toString());
+//            }
+//        }
+//              
+//        return 0;
+//    }
 }

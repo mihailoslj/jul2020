@@ -9,6 +9,7 @@ import baza.DBBroker;
 import domen.Meteorolog;
 import domen.Prognoza;
 import domen.Region;
+import domen.StavkaIzvestaja;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -50,6 +51,10 @@ public class Kontroler {
             Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public ArrayList<StavkaIzvestaja> vratiIzvestaj(String dodatniUpit) {
+        return dbb.vratiIzvestaj(dodatniUpit);
     }
 
 }
