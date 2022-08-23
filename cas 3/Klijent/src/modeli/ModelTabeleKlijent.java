@@ -62,6 +62,10 @@ public class ModelTabeleKlijent extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public ArrayList<PrognozaRegion> getLista() {
+        return lista;
+    }
+
    
 
 }

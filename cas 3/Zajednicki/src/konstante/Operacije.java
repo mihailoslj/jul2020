@@ -13,5 +13,6 @@ public interface Operacije {
 
     public static final int LOGIN = 1;
     public static final int VRATI_REGIONE = 2;
+    public static final int SACUVAJ_PROGNOZU = 3;
     
 }

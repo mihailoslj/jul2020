@@ -7,8 +7,12 @@ package logika;
 
 import baza.DBBroker;
 import domen.Meteorolog;
+import domen.Prognoza;
 import domen.Region;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,6 +40,16 @@ public class Kontroler {
 
     public ArrayList<Region> vratiRegione() {
         return dbb.vratiRegione();
+    }
+
+    public boolean sacuvajPrognozu(Prognoza p) {//ova metoda u dbbrokeru moze da baci gresku (throws exception) te 
+                                                //je ovaj ovde kod okruzujemo sa try-catch da mozemo da je uhvatimo
+        try {
+            return dbb.sacuvajPrognozu(p);
+        } catch (SQLException ex) {
+            Logger.getLogger(Kontroler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
 }

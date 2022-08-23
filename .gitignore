@@ -1,0 +1,22 @@
+
+*.class
+*.class
+*.class
+*.class
+*.class
+cas 3/Klijent/build/classes/forme/*.class
+cas 3/Klijent/build/classes/kontroler/*.class
+cas 3/Klijent/build/classes/modeli/*.class
+cas 3/Server/build/classes/baza/*.class
+cas 3/Server/build/classes/forme/*.class
+cas 3/Server/build/classes/logika/*.class
+cas 3/Server/build/classes/modeli/*.class
+cas 3/Server/build/classes/niti/*.class
+cas 3/Zajednicki/build/classes/domen/*.class
+cas 3/Zajednicki/build/classes/konstante/*.class
+cas 3/Zajednicki/build/classes/transfer/*.class
+cas 3/Klijent/build/classes/forme/KlijentskaForma$3.class
+*.class
+*.class
+*.form
+cas 3/Klijent/build/classes/forme/KlijentskaForma$1.class

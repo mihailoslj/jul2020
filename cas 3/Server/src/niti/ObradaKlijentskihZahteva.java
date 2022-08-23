@@ -6,6 +6,7 @@
 package niti;
 
 import domen.Meteorolog;
+import domen.Prognoza;
 import domen.Region;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,18 +40,25 @@ public class ObradaKlijentskihZahteva extends Thread {
             ServerskiOdgovor so = new ServerskiOdgovor();
             switch (kz.getOperacija()) {
                 case Operacije.LOGIN:
-                    HashMap<String, String> mapa = (HashMap<String, String>) kz.getParametar();
+                    HashMap<String, String> mapa = (HashMap<String, String>) kz.getParametar(); //sta primam od Klijenta
                     String username = mapa.get("username");
                     String password = mapa.get("password");
                     
-                    Meteorolog meteorolog = Kontroler.getInstance().login(username, password);
+                    Meteorolog meteorolog = Kontroler.getInstance().login(username, password); //sta prosledjujem i dobijam kao
+                                                                                               //odgovor od servera
                     
-                    so.setOdgovor(meteorolog);
+                    so.setOdgovor(meteorolog);                                                 //sta radim sa dobijenim podacima
+                                                                                               //tj sta saljem nazad
                     break;
                     
                 case Operacije.VRATI_REGIONE:
                     ArrayList<Region> regioni = Kontroler.getInstance().vratiRegione();
                     so.setOdgovor(regioni);
+                    break;
+                case Operacije.SACUVAJ_PROGNOZU:
+                    Prognoza p = (Prognoza) kz.getParametar();
+                    boolean uspesno = Kontroler.getInstance().sacuvajPrognozu(p);
+                    so.setOdgovor(uspesno);
                     break;
 
             }

@@ -6,9 +6,16 @@
 package forme;
 
 import domen.Meteorolog;
+import domen.Prognoza;
 import domen.PrognozaRegion;
 import domen.Region;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import konstante.Operacije;
 import kontroler.Komunikacija;
 import modeli.ModelTabeleKlijent;
@@ -130,6 +137,11 @@ public class KlijentskaForma extends javax.swing.JFrame {
 
         btnSacuvaj.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnSacuvaj.setText("Sacuvaj prognozu za dan");
+        btnSacuvaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSacuvajActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -237,6 +249,38 @@ public class KlijentskaForma extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnObrisiActionPerformed
+
+    private void btnSacuvajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajActionPerformed
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+            Date dan = sdf.parse(txtDan.getText());
+            
+            String opis = txtOpis.getText();
+            
+            ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel();          
+            
+            Prognoza p = new Prognoza(-1, dan, opis, meteorolog, mt.getLista());
+            
+            //saljem prognozu serveru
+            KlijentskiZahtev kz = new KlijentskiZahtev();
+            kz.setParametar(p);
+            kz.setOperacija(Operacije.SACUVAJ_PROGNOZU);
+            
+            Komunikacija.getInstance().posaljiZahtev(kz);
+            ServerskiOdgovor so = Komunikacija.getInstance().primiOdgovor();
+            
+            boolean uspesno = (boolean) so.getOdgovor();
+            
+            if(uspesno) {
+                JOptionPane.showMessageDialog(this, "Uspesno sacuvano"); //showm skracenica
+            }else {
+                JOptionPane.showMessageDialog(this, "Nije uspesno sacuvano"); //showm skracenica
+            }
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(KlijentskaForma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSacuvajActionPerformed
 
     /**
      * @param args the command line arguments

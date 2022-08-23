@@ -6,7 +6,10 @@
 package baza;
 
 import domen.Meteorolog;
+import domen.Prognoza;
+import domen.PrognozaRegion;
 import domen.Region;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class DBBroker {
 
-    public ArrayList<Object> vrati() {
+    public ArrayList<Object> vrati() { //ovo uvek kopiram kad radim SELECT upit, za sve ostalo kopiram iz cuvajIzmeniBrisi()
         ArrayList<Object> lista = new ArrayList<>();
         String upit = "";
         try {
@@ -95,6 +98,85 @@ public class DBBroker {
         }
 
         return lista;
+    }
+
+    public boolean sacuvajPrognozu(Prognoza p) throws SQLException { //ovo thows Exception sam dodao jer mi lampica rekla
+                                                                    //da se moze javiti SQL exception; ne pisem try-catch
+        String upit = "INSERT INTO PROGNOZA VALUES (?,?,?,?)";
+        int prognozaID = vratiPrognozuID();
+        try {
+            PreparedStatement ps = Konekcija.getInstance().getConnection().prepareStatement(upit); //sta ubacujemo u bazu
+            ps.setInt(1, prognozaID); //prvi parametar na koje mesto(kolonu) ce da se upise, a drugo sta se upisuje
+            ps.setDate(2, new Date(p.getDan().getTime())); //ovo sve jer moramo rucno da pretvorimo Date u tip iz sql.java
+            ps.setString(3,p.getOpis());
+            ps.setInt(4, p.getMeteorolog().getMeteorologID());
+            
+            p.setPrognozaID(prognozaID);
+            
+            ps.executeUpdate(); //ubacujemo u bazu
+            
+            //ako se desi greska kod ubacivanja prognoza za regione da ne moze da ubaci prognozu
+            //"ne mozemo da unesemo racun a da ne unesemo stavke racuna"
+            if(sacuvajPrognozeZaRegione(p)) {          
+                Konekcija.getInstance().getConnection().commit(); //potvrdjujemo izmenu
+                return true;
+            }else {
+                Konekcija.getInstance().getConnection().rollback();
+                return false;
+            }
+            
+
+        } catch (SQLException ex) {
+            Konekcija.getInstance().getConnection().rollback(); 
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    private int vratiPrognozuID() {
+        String upit = "SELECT MAX(prognozaid) FROM prognoza";
+        int id = 0;
+        try {
+            Statement st = Konekcija.getInstance().getConnection().createStatement();
+            ResultSet rs = st.executeQuery(upit);
+            while (rs.next()) { // nije morao while ovde, dobije se tabela velicine 1x1
+                id = rs.getInt(1); //moglo je i rs.get("MAX[PROGNOZAID]") jer je tako naziv kolone u tabeli
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return ++id;
+    }
+
+    private boolean sacuvajPrognozeZaRegione(Prognoza p) throws SQLException {
+         String upit = "INSERT INTO prognozaregion VALUES (?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps = Konekcija.getInstance().getConnection().prepareStatement(upit);
+            
+            int rb = 0;
+            for (PrognozaRegion prog : p.getListaPrognozaZaRegione()) {
+                ps.setInt(1, p.getPrognozaID());
+                ps.setInt(2, ++rb);
+                ps.setDouble(3, prog.getTemperatura());
+                ps.setString(4, prog.getMeteoAlarm());
+                ps.setString(5, prog.getPojava());
+                ps.setInt(6, prog.getRegion().getRegionID());
+            
+                ps.addBatch(); //zato sto ps.executeUpdate() ubacuje samo jedan red u tablu pa je ovo nacin da se ubaci vise njih
+            
+            }
+            
+            ps.executeBatch(); //zamnenjeno je ps.executeUpdate()
+            Konekcija.getInstance().getConnection().commit();
+
+            return true;
+
+        } catch (SQLException ex) {
+            Konekcija.getInstance().getConnection().rollback();
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
 }

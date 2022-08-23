@@ -18,7 +18,9 @@ public class Prognoza implements Serializable{
     private Date dan;
     private String opis;
     private Meteorolog meteorolog;
-    private ArrayList<PrognozaRegion> listaPrognozaZaRegione;
+    private ArrayList<PrognozaRegion> listaPrognozaZaRegione; //"'Сачувај прогнозу за дан' клијент програм шаље захтев серверу да 
+                                //                             сачува прогнозу за дан (подаци се чувају на страни серверског 
+                                //                             програма у табелама Prognoza и PrognozaRegion"
 
     public Prognoza(int prognozaID, Date dan, String opis, Meteorolog meteorolog, ArrayList<PrognozaRegion> listaPrognozaZaRegione) {
         this.prognozaID = prognozaID;
