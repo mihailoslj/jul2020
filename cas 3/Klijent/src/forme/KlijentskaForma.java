@@ -26,6 +26,7 @@ import transfer.ServerskiOdgovor;
 public class KlijentskaForma extends javax.swing.JFrame {
 
     Meteorolog meteorolog;
+    int brojRegiona;
 
     public void setMeteorolog(Meteorolog meteorolog) {
         this.meteorolog = meteorolog;
@@ -263,7 +264,20 @@ public class KlijentskaForma extends javax.swing.JFrame {
             
             String opis = txtOpis.getText();
             
-            ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel();          
+            ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel();  
+            
+            //seljacki nacin
+//            if(mt.getLista().size() != 5) {
+//                JOptionPane.showMessageDialog(this, "Morate uneti prognozu za svaki region!");
+//                return;
+//            }
+            
+            //opsti nacin
+            if(mt.getLista().size() != brojRegiona) {
+//                JOptionPane.showMessageDialog(this, "Morate uneti prognozu za svaki region!");
+//                return;
+            }
+            
             
             Prognoza p = new Prognoza(-1, dan, opis, meteorolog, mt.getLista());
             
@@ -355,6 +369,8 @@ public class KlijentskaForma extends javax.swing.JFrame {
         ServerskiOdgovor so = Komunikacija.getInstance().primiOdgovor();
         
         ArrayList<Region> regioni = (ArrayList<Region>) so.getOdgovor();
+        
+        brojRegiona = regioni.size();
         
         cmbRegion.removeAllItems(); //brisem sadrzaj kombo boksa pre punjenja; ovo mora da se radi samo upamti
         
