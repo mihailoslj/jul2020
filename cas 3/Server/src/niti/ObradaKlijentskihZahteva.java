@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,6 +60,11 @@ public class ObradaKlijentskihZahteva extends Thread {
                     Prognoza p = (Prognoza) kz.getParametar();
                     boolean uspesno = Kontroler.getInstance().sacuvajPrognozu(p);
                     so.setOdgovor(uspesno);
+                    break;
+                case Operacije.DA_LI_POSTOJI_U_BAZI:
+                    Date dan = (Date) kz.getParametar();
+                    boolean postoji = Kontroler.getInstance().postojiUBazi(dan);
+                    so.setOdgovor(postoji);
                     break;
 
             }

@@ -275,6 +275,11 @@ public class KlijentskaForma extends javax.swing.JFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
             Date dan = sdf.parse(txtDan.getText());
             
+            if(postojiDatumUBazi(dan)){
+                JOptionPane.showMessageDialog(this, "Vec postoji prognoza za taj datum!");
+                return;
+            }
+            
             String opis = txtOpis.getText();
             
             ModelTabeleKlijent mt = (ModelTabeleKlijent) tblPrognoze.getModel();  
@@ -409,4 +414,15 @@ public class KlijentskaForma extends javax.swing.JFrame {
 //              
 //        return 0;
 //    }
+
+    private boolean postojiDatumUBazi(Date dan) {
+        KlijentskiZahtev kz = new KlijentskiZahtev();
+            kz.setParametar(dan);
+            kz.setOperacija(Operacije.DA_LI_POSTOJI_U_BAZI);
+        Komunikacija.getInstance().posaljiZahtev(kz);
+        ServerskiOdgovor so = Komunikacija.getInstance().primiOdgovor();
+        
+        boolean postoji = (boolean) so.getOdgovor();
+        return postoji;
+    }
 }

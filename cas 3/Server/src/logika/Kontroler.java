@@ -12,6 +12,7 @@ import domen.Region;
 import domen.StavkaIzvestaja;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +56,10 @@ public class Kontroler {
 
     public ArrayList<StavkaIzvestaja> vratiIzvestaj(String dodatniUpit) {
         return dbb.vratiIzvestaj(dodatniUpit);
+    }
+
+    public boolean postojiUBazi(Date dan) {
+        return dbb.postojiUBazi(dan);
     }
 
 }

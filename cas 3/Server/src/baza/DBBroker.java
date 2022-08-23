@@ -204,4 +204,25 @@ public class DBBroker {
 
     }
 
+    public boolean postojiUBazi(java.util.Date dan) {
+        ArrayList<Date> lista = new ArrayList<>();
+        Date pom = new Date(dan.getTime());
+        String upit = "SELECT DAN FROM PROGNOZA";
+        try {
+            Statement st = Konekcija.getInstance().getConnection().createStatement();
+            ResultSet rs = st.executeQuery(upit);
+            while (rs.next()) {
+                lista.add(rs.getDate(1));
+            }
+            for (Date date : lista) {
+                if(date.equals(pom))
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    
+    }
 }
