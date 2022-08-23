@@ -6,6 +6,7 @@
 package modeli;
 
 import domen.StavkaIzvestaja;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -36,12 +37,13 @@ public class ModelTabeleServer extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         StavkaIzvestaja si = lista.get(rowIndex);
-
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        
         switch (columnIndex) {
             case 0:
                 return si.getMeteorolog();
             case 1:
-                return si.getDan();
+                return sdf.format(si.getDan()); //sdf.parse -pretvara String u Date, sdf.format - formatira Date
             case 2:
                 return si.getPrognozaZaRegione();
 

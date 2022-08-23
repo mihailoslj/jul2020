@@ -26,7 +26,7 @@ public class OsveziNit extends Thread {
         while(true){
             sf.izvrsiUpit();
             try {
-                sleep(5000);
+                sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(OsveziNit.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -6,8 +6,12 @@
 package forme;
 
 import domen.StavkaIzvestaja;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import logika.Kontroler;
 import modeli.ModelTabeleServer;
 import niti.OsveziNit;
@@ -60,8 +64,10 @@ public class ServerskaForma extends javax.swing.JFrame {
         });
 
         txtDanOd.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd.MM.yyyy"))));
+        txtDanOd.setText("11.08.2022");
 
         txtDanDo.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd.MM.yyyy"))));
+        txtDanDo.setText("19.08.2022");
 
         tblIzvestaj.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -106,8 +112,8 @@ public class ServerskaForma extends javax.swing.JFrame {
                     .addComponent(cbDanDo)
                     .addComponent(txtDanDo, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
@@ -165,6 +171,61 @@ public class ServerskaForma extends javax.swing.JFrame {
             listaBaza = Kontroler.getInstance().vratiIzvestaj(dodatniUpit);
             mt.dodajizvestaj(listaBaza);
         }
+        if(cbDanOd.isSelected() && cbDanDo.isSelected()) { 
+            
+            try {
+            Date danOd = sdf.parse(txtDanOd.getText());
+            Date danDo = sdf.parse(txtDanDo.getText());
+            
+            //WHERE DAN BETWEEN '2020-10-11' AND '2020-10-19'
+            dodatniUpit = "WHERE DAN BETWEEN '" + new java.sql.Date(danOd.getTime())+ "' AND '"
+                    + new java.sql.Date(danDo.getTime()) + "' ";
+            
+            
+            } catch (ParseException ex) {
+                Logger.getLogger(ServerskaForma.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            listaBaza = Kontroler.getInstance().vratiIzvestaj(dodatniUpit);
+            mt.dodajizvestaj(listaBaza);
+        }
+        if(cbDanOd.isSelected() && !cbDanDo.isSelected()) {
+            
+            try {
+            Date danOd = sdf.parse(txtDanOd.getText());
+            
+            //WHERE DAN BETWEEN '2020-10-11' AND '2020-10-19'
+            dodatniUpit = "WHERE DAN >= '" + new java.sql.Date(danOd.getTime())+ "' ";
+            
+            
+            } catch (ParseException ex) {
+                Logger.getLogger(ServerskaForma.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            listaBaza = Kontroler.getInstance().vratiIzvestaj(dodatniUpit);
+            mt.dodajizvestaj(listaBaza);
+        }
+        
+        if(!cbDanOd.isSelected() && cbDanDo.isSelected()) {
+            
+            try {
+            Date danDo = sdf.parse(txtDanDo.getText());
+            
+            //WHERE DAN BETWEEN '2020-10-11' AND '2020-10-19'
+            dodatniUpit = "WHERE DAN <= '" + new java.sql.Date(danDo.getTime())+ "' ";
+            
+            
+            } catch (ParseException ex) {
+                Logger.getLogger(ServerskaForma.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            listaBaza = Kontroler.getInstance().vratiIzvestaj(dodatniUpit);
+            mt.dodajizvestaj(listaBaza);
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

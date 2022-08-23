@@ -187,6 +187,7 @@ public class DBBroker {
                 + "FROM meteorolog m JOIN prognoza p ON (m.meteorologid = p.meteorologid) "
                 + "JOIN prognozaregion pzr ON (p.prognozaid = pzr.prognozaid) "
                 + "JOIN region r ON (pzr.regionid = r.regionid) "
+                + dodatniUpit
                 + "GROUP BY meteorolog, dan";
         try {
             Statement st = Konekcija.getInstance().getConnection().createStatement();
