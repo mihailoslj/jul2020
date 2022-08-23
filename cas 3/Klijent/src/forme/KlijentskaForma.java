@@ -221,6 +221,12 @@ public class KlijentskaForma extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajActionPerformed
+        
+        if(txtTemperatura.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Morate uneti temperaturu!");
+            return;
+        }
+        
         //vadimo sve podatke koje nam trebaju za tabelu iz odgovarajucih tekstualni polja/kombo-bekseva
         double temperatura = Double.parseDouble(txtTemperatura.getText());
         Region region = (Region) cmbRegion.getSelectedItem(); //ovo getSele... vraca Object pa ga kastujem
@@ -272,7 +278,7 @@ public class KlijentskaForma extends javax.swing.JFrame {
             boolean uspesno = (boolean) so.getOdgovor();
             
             if(uspesno) {
-                JOptionPane.showMessageDialog(this, "Uspesno sacuvano"); //showm skracenica
+                JOptionPane.showMessageDialog(this, "Uspesno sacuvano"); //showm skracenica; pop-up prozor
             }else {
                 JOptionPane.showMessageDialog(this, "Nije uspesno sacuvano"); //showm skracenica
             }
